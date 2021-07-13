@@ -1,18 +1,15 @@
 import express from "express";
+import morgan from "morgan";
 
 //create server
 const PORT = 4000;
 const app = express();
+const logger = morgan("dev");
 
 //application setting
-const handleHome = (req, res) => {
-    return res.end(); //reqeust 종료 1
-}
-const handleLogin = (req, res) => {
-    return res.send("Login here.") //reqeust 종료 2
-}
-app.get("/", handleHome);
-app.get("/login", handleLogin);
+
+app.use(logger);
+app.get("/", (req, res) => res.end());
 
 //express code 
 const handleListening = () => 
