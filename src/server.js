@@ -1,15 +1,19 @@
 import express from "express";
 import morgan from "morgan";
+import globalRouter from "./routers/globalRouter";
+import videoRouter from "./routers/videoRouter";
+import usersRouter from "./routers/userRouter";
 
 //create server
 const PORT = 4000;
 const app = express();
+
 const logger = morgan("dev");
-
-//application setting
-
 app.use(logger);
-app.get("/", (req, res) => res.end());
+
+app.use("/", globalRouter);
+app.use("/videos", videoRouter);
+app.use("/users", usersRouter);
 
 //express code 
 const handleListening = () => 
