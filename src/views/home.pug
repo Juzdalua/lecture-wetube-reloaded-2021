@@ -1,6 +1,9 @@
 extends base.pug
-
-
+include mixins/video
 
 block content 
-    h1 Home!
+    h2 Welcome ~
+    each potato in videos 
+        +video(potato) 
+    else 
+        li Sorry nothing found.
