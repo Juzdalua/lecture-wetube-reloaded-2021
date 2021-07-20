@@ -1,5 +1,7 @@
 # Wetube Reloaded
 
+ES6 & PUG & nodeJS & mongoose
+
 <!-- global router -->
 
 / -> Home
