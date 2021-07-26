@@ -7,11 +7,10 @@ import {
 const videoRouter = express.Router();
 
 // /upload를 /:id 아래 두면  express가 upload를 변수로 인식
-
-videoRouter.get("/:id(\\d+)", watch); //숫자만 받는 정규식
-videoRouter.route("/:id(\\d+)/edit").get(getEdit).post(postEdit);
+videoRouter.route("/upload").get(getUpload).post(postUpload);
+videoRouter.get("/:id([0-9a-f]{24})", watch); //hexadecimal 정규식
+videoRouter.route("/:id([0-9a-f]{24})/edit").get(getEdit).post(postEdit);
 // videoRouter.get("/:id(\\d+)/edit", getEdit);
 // videoRouter.post("/:id(\\d+)/edit", postEdit);
 
-videoRouter.route("/upload").get(getUpload).post(postUpload);
 export default videoRouter;

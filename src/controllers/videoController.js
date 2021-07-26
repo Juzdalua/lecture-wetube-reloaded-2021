@@ -4,7 +4,7 @@ import Video from "../models/Video";
 // Video.find({}, (error, videos) => {}); 
 export const home = async(req, res) => {   
     try{
-        const videos = await Video.find({});
+        const videos = await Video.find({}); //find all video and put array videos
         // db를 받을 때까지 await이 JS를 기다려줌
         return res.render("home", {pageTitle : "Home", videos});
     } catch(error){
@@ -12,19 +12,34 @@ export const home = async(req, res) => {
     }
 };
 // render(name of view, variable)
-export const watch = (req, res) => {
-    const id = req.params.id;    //const {id} = req.params;    
-    
-     return res.render("watch", {pageTitle: `Watch`, });
+export const watch = async (req, res) => {
+    const id = req.params.id;    //const {id} = req.params;
+    const video = await Video.findById(id);
+    if(!video){
+        return res.render("404", {pageTitle:"Video not found"});        
+    } 
+    return res.render("watch", {pageTitle: video.title, video});
 };
-export const getEdit = (req, res) => {
-    const {id} = req.params;        
-    return res.render("edit", {pageTitle:`Editing `});
+export const getEdit = async (req, res) => {
+    const {id} = req.params;
+    const video = await Video.findById(id);        
+    if(video === null){
+        return res.render("404", {pageTitle:"Video not found."})        
+    } 
+    return res.render("edit", {pageTitle:`Edit: ${video.title}`, video});
+    
 } ;
-export const postEdit = (req, res) =>{
-    const {id} = req.params; 
-    const title = req.body.title;     //const {title} = req.body    
-     return res.redirect(`/videos/${id}`);
+export const postEdit = async (req, res) =>{
+    const {id} = req.params;
+    const {title, description, hashtags} = req.body;
+    const video = await Video.exists({_id:id}); // true or false   
+    if(!video){
+        return res.render("404", {pageTitle: "Video not found."});
+    }
+    await Video.findByIdAndUpdate(id, {
+        title, description, hashtags:Video.formatHashtags(hashtags)
+    }); 
+    return res.redirect(`/videos/${id}`);
 };
 export const getUpload = (req, res) => {
   return res.render("upload", {pageTitle : "Upload Video"});  
@@ -50,9 +65,7 @@ export const postUpload = async (req, res) => {
         await Video.create({
             title, // title: title
             description,            
-            hashtags:hashtags.split(",").map(word => `#${word}`),
-            // "String".split(",") => ,를 기점으로 배열에 String을 분리
-            // array.map(word => `#${word}`) => 각 배열 인자마다 앞에 #을 달아줌            
+            hashtags: Video.formatHashtags(hashtags)            
         }); 
         return res.redirect("/");
     } catch(error){
