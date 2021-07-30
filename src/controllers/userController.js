@@ -35,7 +35,7 @@ export const postJoin = async (req, res) => {
 export const getLogin = (req, res) => res.render("login", {pageTitle:"Login"});
 export const postLogin = async (req, res) => {
     const { username, password} = req.body;
-    const user = await User.findOne({username});
+    const user = await User.findOne({ username, socialOnly:false });
 
     //check if account exists
     if(!user){
@@ -73,6 +73,7 @@ export const finishGithubLogin = async (req, res) => {
         client_id: process.env.GH_CLIENT,
         client_secret: process.env.GH_SECRET,
         code: req.query.code
+        //code는 url parameter로 받음. github이 제공.
     };
     const params = new URLSearchParams(config).toString();
     const finalUrl = `${baseUrl}?${params}`;
@@ -87,18 +88,56 @@ export const finishGithubLogin = async (req, res) => {
     if("access_token" in tokenRequest){
         //access api - user infomation 가져오기
         const {access_token} = tokenRequest;
-        const userRequest = await (await fetch("https://api.github.com/user", {
+        const apiUrl = "https://api.github.com";
+        const userData = await (await fetch(`${apiUrl}/user`, {
             headers: {
                 Authorization: `token ${access_token}`
             }
         })).json();
-        console.log(userRequest);
+        
+        // email 가져오기 - primary/verified: true
+        const emailData = await (
+            await fetch(`${apiUrl}/user/emails`, {
+                headers:{
+                    Authorization: `token ${access_token}`
+                }
+            }
+        )).json();
+        const emailObj = emailData.find(
+            email => email.primary === true && email.verified === true);
+        if(!emailObj){
+            return res.redirect("/login");    
+        }
+        
+        //github와 email이 같으면 로그인시켜주기
+        let user = await User.findOne({email: emailObj.email});
+        if(!user){
+            //create an account
+           user = await User.create({
+                name: userData.name,
+                username: userData.login,
+                email: emailObj.email,
+                password: "",
+                location: userData.location,
+                socialOnly: true,
+                avatarUrl: userData.avatar_url
+            });
+        }                    
+        //login
+        req.session.loggedIn = true;
+        req.session.user = user;
+        return res.redirect("/");
+        
     } else{
         return res.redirect("/login");
     }
 };
 
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+};
+
+
 export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Remove User");
-export const logout = (req, res) => res.send("Logout");
 export const see = (req, res) => res.send("See User");
