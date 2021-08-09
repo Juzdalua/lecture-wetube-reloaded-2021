@@ -17,10 +17,10 @@ export const protectorMiddleware = (req, res, next)=> {
 
 // 로그인 유저 방지
 export const publicOnlyMiddleware = (req, res, next) => {
-    // if(!req.session.loggedIn){
-    //     return next();
-    // } else{
-    //     res.redirect("/");
-    // }
-    return req.session.loggedIn === false ? next() : res.redirect("/");
+    if(!req.session.loggedIn){
+        return next();
+    } else{
+        res.redirect("/");
+    }
+    // return req.session.loggedIn === false ? next() : res.redirect("/");
 };

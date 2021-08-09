@@ -142,8 +142,22 @@ export const logout = (req, res) => {
 export const getEdit = (req, res) => {
     return res.render("edit-profile", {pageTitle:"Edit Profile"});
 };
-export const postEdit = (req, res) => {
-    return res.render("edit-profile", {pageTitle:"Edit Profile"});
+export const postEdit = async (req, res) => {
+    // const id = req.session.user.id; 
+    // const {name, email, username, location} = req.body;
+    const {
+        session: {user: {_id}},
+        body: {name, email, username, location}
+    } = req;    
+    
+    //DB & session Update
+    const updateUser = await User.findByIdAndUpdate(_id, {
+        name, email, username, location
+        }, {new:true} 
+    );
+    req.session.user = updateUser;
+
+    return res.redirect("/users/edit");
 };
 
 
