@@ -146,17 +146,18 @@ export const postEdit = async (req, res) => {
     // const id = req.session.user.id; 
     // const {name, email, username, location} = req.body;
     const {
-        session: {user: {_id}},
-        body: {name, email, username, location}
+        session: {user: {_id, avatarUrl}},
+        body: {name, email, username, location},
+        file
     } = req;    
     
     //DB & session Update
     const updateUser = await User.findByIdAndUpdate(_id, {
+        avatarUrl: file ? file.path : avatarUrl ,
         name, email, username, location
         }, {new:true} 
     );
     req.session.user = updateUser;
-
     return res.redirect("/users/edit");
 };
 
@@ -170,9 +171,9 @@ export const postChangePassword = async (req, res) =>{
         session:{
             user: {_id, password}
         },
-        body: {oldPassword, newPassword, newPassword2}
+        body: {oldPassword, newPassword, newPassword2},        
     } = req;    
-
+    
     //password confirm validation
     if(newPassword !== newPassword2){
         return res.status(400).render("users/change-password", {pageTitle:"Change Password", errorMessage: "New Password does not match."});
