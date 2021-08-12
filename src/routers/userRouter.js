@@ -12,9 +12,9 @@ usersRouter.get("/logout", protectorMiddleware, logout);
 usersRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(avatarUpload.single("avatar"), postEdit);
 usersRouter.get("/github/start",publicOnlyMiddleware, startGithubLogin);
 usersRouter.get("/github/finish",publicOnlyMiddleware, finishGithubLogin);
-usersRouter.get(":id(\\d+)", see);
 usersRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
-// :xx -> url 내부에 변수 지정
+usersRouter.get("/:id", see); // :xx -> url 내부에 변수 지정
+
 
 
 export default usersRouter;

@@ -10,7 +10,8 @@ const videoSchema = new mongoose.Schema({
     meta: {
         views: { type:Number, default: 0},
         rating: { type:Number, default: 0}
-    }
+    },
+    owner: {type:mongoose.Schema.Types.ObjectId, required:true, ref:"User"}
 });
 
 //middleware는 model보다 먼저 만들어야함.
