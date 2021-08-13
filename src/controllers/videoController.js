@@ -5,7 +5,7 @@ import User from "../models/User";
 // Video.find({}, (error, videos) => {}); 
 export const home = async(req, res) => {   
     try{
-        const videos = await Video.find({}).sort({createdAt:"desc"}); //find all video and put array videos
+        const videos = await Video.find({}).sort({createdAt:"desc"}).populate("owner"); //find all video and put array videos
         // db를 받을 때까지 await이 JS를 기다려줌
         return res.render("home", {pageTitle : "Home", videos});
     } catch(error){
@@ -115,7 +115,7 @@ export const search = async (req, res) =>{
                 $regex: new RegExp(keyword, "i") //i-대소문자 구분X
                 //contain 정규식
             }
-        });        
+        }).populate("owner");        
     }
     return res.render("search", {pageTitle:"Search", videos});
 };

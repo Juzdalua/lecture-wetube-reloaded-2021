@@ -2,5 +2,11 @@ extends ../base
 include ../mixins/video
 
 block content 
-    each item in user.videos
-        +video(item)
+    div.profile__data
+        img(src=user.avatarUrl).avatar
+        h3=user.name
+    div.video-grid
+        each item in user.videos
+            +video(item)
+        else 
+            span.empty__message No videos found

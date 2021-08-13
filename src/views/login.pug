@@ -6,10 +6,8 @@ block content
     form(action="" method="POST") 
         input(type="text", placeholder="Username", name="username")
         input(type="password", placeholder="PASSWORD", name="password")
-        input(type="submit", value="Log in")
-        br
-        a(href="/users/github/start") Continue with Github &rarr;
-    hr
-    div 
+        input(type="submit", value="Log in")        
+        include partials/social-login.pug
+    div.auth-switch
         span Don't have an account? <br>
         a(href="/join") Create one now &rarr;
