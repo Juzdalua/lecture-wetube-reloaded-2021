@@ -7,7 +7,10 @@ const path = require("path");
 //entry : 작성한 코드
 //output : webpack으로 변환된 코드
 module.exports = {
-    entry: "./src/client/js/main.js", //작성하는 코드
+    entry: {
+        main: "./src/client/js/main.js",
+        videoPlayer: "./src/client/js/videoPlayer.js",
+    }, //작성하는 코드
     mode: "development", //저장되는 코드가 압축되지 않게
     watch: true, //터미널을 계속 실행
     plugins: [
@@ -16,7 +19,7 @@ module.exports = {
         }),
     ],
     output: {
-        filename:"js/main.js",
+        filename:"js/[name].js",
         path: path.resolve(__dirname, "assets"),
         clean:true,        
     },
