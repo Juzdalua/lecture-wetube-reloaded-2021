@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
 const playBtnIcon = playBtn.querySelector("i");
@@ -131,4 +133,13 @@ video.addEventListener("click", ()=>{
         video.pause();
         playBtnIcon.classList = "fas fa-play";
     }
+});
+
+// update views
+video.addEventListener("ended", ()=>{
+    //console.log(videoContainer.dataset);
+    const {id} = videoContainer.dataset;
+    fetch(`/api/videos/${id}/view`, {
+        method:"POST"
+    });
 });

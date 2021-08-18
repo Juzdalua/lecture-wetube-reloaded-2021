@@ -5,6 +5,7 @@ import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import usersRouter from "./routers/userRouter";
+import apiRouter from "./routers/apiRouter";
 import {localsMiddleware} from "./middlewares";
 
 //create server
@@ -31,5 +32,6 @@ app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", usersRouter);
+app.use("/api", apiRouter);
 
 export default app;
