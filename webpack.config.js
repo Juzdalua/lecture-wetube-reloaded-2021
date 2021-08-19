@@ -10,6 +10,7 @@ module.exports = {
     entry: {
         main: "./src/client/js/main.js",
         videoPlayer: "./src/client/js/videoPlayer.js",
+        recorder:"./src/client/js/recorder.js"
     }, //작성하는 코드
     mode: "development", //저장되는 코드가 압축되지 않게
     watch: true, //터미널을 계속 실행
