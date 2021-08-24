@@ -7,6 +7,7 @@ import videoRouter from "./routers/videoRouter";
 import usersRouter from "./routers/userRouter";
 import apiRouter from "./routers/apiRouter";
 import {localsMiddleware} from "./middlewares";
+import flash from "express-flash";
 
 //create server
 const app = express();
@@ -26,6 +27,7 @@ app.use(session({
     })
 );
 
+app.use(flash()); // req.flash() 사용가능.
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));

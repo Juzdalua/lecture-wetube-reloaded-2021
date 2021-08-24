@@ -9,12 +9,12 @@ export const localsMiddleware = (req, res, next) =>{
 
 // 비로그인 유저 방지
 export const protectorMiddleware = (req, res, next)=> {
-    // if(req.session.loggedIn){
-    //     return next();
-    // } else{
-    //     return res.redirect("/login");
-    // }
-    return req.session.loggedIn === true ? next() : res.redirect("/login");
+    if(req.session.loggedIn){
+        return next();
+    } else{
+        req.flash("error", "Not aurhorized");
+        return res.redirect("/login");
+    }    
 };
 
 // 로그인 유저 방지
@@ -22,6 +22,7 @@ export const publicOnlyMiddleware = (req, res, next) => {
     if(!req.session.loggedIn){
         return next();
     } else{
+        req.flash("error", "Not aurhorized");
         res.redirect("/");
     }
     // return req.session.loggedIn === false ? next() : res.redirect("/");

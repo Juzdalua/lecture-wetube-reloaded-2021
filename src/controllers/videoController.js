@@ -30,8 +30,10 @@ export const getEdit = async (req, res) => {
     } 
 
     //owner만 수정가능
-    if(String(video.owner) !== String(_id))
+    if(String(video.owner) !== String(_id)){
+    req.flash("error", "Not aurhorized");
         return res.status(403).redirect("/");
+    }
     return res.render("edit", {pageTitle:`Edit: ${video.title}`, video});
     
 } ;
