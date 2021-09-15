@@ -16,7 +16,15 @@ const logger = morgan("dev");
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views"); 
 app.use(logger);
+
+//form으로 받아오는 req.body 변수 읽기 위함.
 app.use(express.urlencoded({extended:true}));
+
+//fetch로 받아오는 req.body text를 읽기 위함.
+app.use(express.text());
+
+//object <-> string 변환 미들웨어
+app.use(express.json());
 
 // session. 사이트로 들어오는 모두를 기억. router 전에 작성!
 app.use(session({

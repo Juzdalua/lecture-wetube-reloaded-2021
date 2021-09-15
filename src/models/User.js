@@ -9,7 +9,8 @@ const userSchema = mongoose.Schema({
     password: { type: String, unique: true},   
     name: { type:String, required: true },
     location: String,
-    videos: [{type:mongoose.Schema.Types.ObjectId, ref:"Video"}]
+    videos: [{type:mongoose.Schema.Types.ObjectId, ref:"Video"}],
+    comments: [{type:mongoose.Schema.ObjectId, ref:"Comment"}],
 });
 
 //비밀번호가 수정될때만 작동하는 middleware
